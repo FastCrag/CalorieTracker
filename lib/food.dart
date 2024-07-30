@@ -11,7 +11,7 @@ class Food{
   int get getCalories{
     return calories;
   }
-  void setCalories(int newCalories){
+  void setCaloriesLOL(int newCalories){
     calories = newCalories;
   }
 
