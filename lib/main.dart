@@ -81,23 +81,29 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           ],
         ),
       ),
+
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
           SingleChildScrollView(
             child: Column(
                 children: [
+                  //Displays total amount of calories consumed
+                  totalCaloriesCard(),
                   ...List.generate(
                     foodList.length,
                         (index) => createFoodCard(index),
                   ),
                   addNewFoodCard(),
+                  // addCalorieTotalCard(),
                 ]
             ),
           ),
           SingleChildScrollView(
             child: Column(
                 children: [
+                  //Displays total amount of calories consumed
+                  totalCaloriesCard(),
                   ...List.generate(
                     workoutList.length,
                         (index) => createWorkoutCard(index),
@@ -319,6 +325,44 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+
+  //Display total amount of calories consumed at the top of the calories list
+  Widget totalCaloriesCard() {
+    return Card(
+      elevation: 5,
+      clipBehavior: Clip.hardEdge,
+      child: SizedBox(
+        width: 350,
+        height: 75,
+        child: Center(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Total Calories: ${getTotalCalories()}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  //Function to get the total amount of calories
+  //Also accounts for amount of calories burned from workouts
+  int getTotalCalories() {
+    int totalCaloriesFromFood = foodList.fold(0, (sum, food) => sum + food.getCalories);
+    int totalCaloriesBurned = workoutList.fold(0, (sum, workout) => sum + workout.getCaloriesBurned);
+    return totalCaloriesFromFood - totalCaloriesBurned;
   }
 
   Widget addNewWorkoutCard() {
