@@ -16,4 +16,13 @@ class Workout{
   }
 
   Workout({required this.type, required this.caloriesBurned});
+
+  Workout.fromJson(Map<String, dynamic> json)
+      : type = json['type'] as String,
+        caloriesBurned = json['caloriesBurned'] as int;
+
+  Map<String, dynamic> toJson() => {
+    'type' : type,
+    'caloriesBurned' : caloriesBurned
+  };
 }
