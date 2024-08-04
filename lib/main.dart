@@ -135,6 +135,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 ]
             ),
           ),
+
           SingleChildScrollView(
             child: Column(
                 children: [
@@ -150,15 +151,32 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: "0",
-        onPressed: (){
-          if (_tabController.index == 0){_addFood();}
-          else {_addWorkout();}
-        },
-        tooltip: (_tabController.index == 0 ? "Add New Food":"Add New Workout"),
-        child: const Icon(Icons.add_circle_outline),
-      ),
+      floatingActionButton: Container(
+        margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+        child:Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            FloatingActionButton(
+              heroTag: "1",
+              onPressed: (){
+                if (_tabController.index == 0){deleteAllFromList(foodList, "Food");}
+                else {deleteAllFromList(workoutList, "Workouts");}
+              },
+              tooltip: (_tabController.index == 0 ? "Add New Food":"Add New Workout"),
+              child: const Icon(Icons.delete_forever),
+            ),
+            FloatingActionButton(
+              heroTag: "0",
+              onPressed: (){
+                if (_tabController.index == 0){_addFood();}
+                else {_addWorkout();}
+              },
+              tooltip: (_tabController.index == 0 ? "Add New Food":"Add New Workout"),
+              child: const Icon(Icons.add_circle_outline),
+            ),
+          ]
+        )
+      )
     );
   }
 
@@ -232,6 +250,37 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         build;
       });
     }
+  }
+
+  void deleteAllFromList(List<dynamic> list, String title) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return AlertDialog(
+          title: Text('Delete all $title'),
+          content: Text('Are you sure you want to delete all the $title?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => {
+                Navigator.pop(context, 'Cancel'),
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => {
+                list.clear(),
+                Navigator.pop(context, 'Delete all'),
+                saveData(),
+                setState(() {
+                  build;
+                })
+              },
+              child: const Text('Delete All'),
+            ),
+          ],
+        );
+      }
+    );
   }
 
   Widget createFoodCard(int index) {
