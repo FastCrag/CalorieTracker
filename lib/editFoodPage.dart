@@ -19,6 +19,8 @@ class EditFoodPage extends StatefulWidget {
 class _EditFoodState extends State<EditFoodPage> {
   late TextEditingController _nameController = TextEditingController(text: widget.foodList[widget.index].getName);
   late TextEditingController _calorieController = TextEditingController(text: widget.foodList[widget.index].getCalories.toString());
+  late TextEditingController _carbsController = TextEditingController(text: widget.foodList[widget.index].getCarbs.toString());
+  late TextEditingController _proteinController = TextEditingController(text: widget.foodList[widget.index].getProtein.toString());
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,30 @@ class _EditFoodState extends State<EditFoodPage> {
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Add a Calorie Amount',
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(20),
+                child: TextField(
+                  controller: _carbsController,
+                  obscureText: false,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Add a Carb Amount (g)',
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(20),
+                child: TextField(
+                  controller: _proteinController,
+                  obscureText: false,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Add a Protein Amount (g)',
                   ),
                 ),
               ),
@@ -111,9 +137,13 @@ class _EditFoodState extends State<EditFoodPage> {
   void saveClicked() {
     String newName = _nameController.text;
     int newCalories = int.parse(_calorieController.text);
+    int newCarbs = int.parse(_carbsController.text);
+    int newProtein = int.parse(_proteinController.text);
 
     widget.foodList[widget.index].setName(newName);
     widget.foodList[widget.index].setCalories(newCalories);
+    widget.foodList[widget.index].setCarbs(newCarbs);
+    widget.foodList[widget.index].setProtein(newProtein);
 
     // Pass back the updated lists
     Navigator.pop(context, true);
