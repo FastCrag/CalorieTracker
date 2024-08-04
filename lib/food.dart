@@ -8,9 +8,8 @@ class Food{
   }
 
   int calories = 0;
-  int get getCalories{
-    return calories;
-  }
+  int get getCalories => calories;
+
   void setCalories(int newCalories){
     calories = newCalories;
   }
