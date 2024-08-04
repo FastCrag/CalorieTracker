@@ -17,6 +17,8 @@ class AddFoodPage extends StatefulWidget {
 class _AddFoodState extends State<AddFoodPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _calorieController = TextEditingController();
+  final TextEditingController _carbsController = TextEditingController();
+  final TextEditingController _proteinController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,30 @@ class _AddFoodState extends State<AddFoodPage> {
                   ),
                 ),
               ),
+              Container(
+                margin: const EdgeInsets.all(20),
+                child: TextField(
+                  controller: _carbsController,
+                  obscureText: false,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Add a Carb Amount (g)',
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(20),
+                child: TextField(
+                  controller: _proteinController,
+                  obscureText: false,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Add a Protein Amount (g)',
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -87,8 +113,10 @@ class _AddFoodState extends State<AddFoodPage> {
   void saveClicked() {
     String newName = _nameController.text;
     int newCalories = int.parse(_calorieController.text);
+    int newCarbs = int.parse(_carbsController.text);
+    int newProtein = int.parse(_proteinController.text);
 
-    widget.foodList.add(Food(name: newName, calories: newCalories));
+    widget.foodList.add(Food(name: newName, calories: newCalories, carbs: newCarbs, protein: newProtein));
 
     // Pass back the updated lists
     Navigator.pop(context, true);

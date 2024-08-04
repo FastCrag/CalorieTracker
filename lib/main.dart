@@ -125,7 +125,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             child: Column(
                 children: [
                   //Displays total amount of calories consumed
-                  totalCaloriesCard(),
+                  totalFoodStatsCard(),
                   ...List.generate(
                     foodList.length,
                         (index) => createFoodCard(index),
@@ -140,7 +140,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             child: Column(
                 children: [
                   //Displays total amount of calories consumed
-                  totalCaloriesCard(),
+                  totalCaloriesBurnedCard(),
                   ...List.generate(
                     workoutList.length,
                         (index) => createWorkoutCard(index),
@@ -321,7 +321,23 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Calories: ' + foodList[index].getCalories.toString(),
+                          'Calories: ${foodList[index].getCalories}',
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Carbs: ${foodList[index].getCarbs}g',
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Protein: ${foodList[index].getProtein}g',
                         ),
                       ],
                     ),
@@ -417,7 +433,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
 
   //Display total amount of calories consumed at the top of the calories list
-  Widget totalCaloriesCard() {
+  Widget totalCaloriesBurnedCard() {
     return Card(
       elevation: 5,
       clipBehavior: Clip.hardEdge,
@@ -431,7 +447,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total Calories: ${getTotalCalories()}',
+                  'Total Calories Burned: ${getTotalCaloriesBurned()}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -445,12 +461,93 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
+  Widget totalFoodStatsCard() {
+    return Card(
+      elevation: 5,
+      clipBehavior: Clip.hardEdge,
+          child: SizedBox(
+              width: 350,
+              child: SingleChildScrollView(
+                physics: ClampingScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                child: Container(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min, // Set mainAxisSize to min
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Total Calories: ${getTotalCaloriesFromFood()}",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+
+                          ]
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Carbs: ${getTotalCarbs()}g',
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Protein: ${getTotalProteins()}g',
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Effective Calories: ${getEffectiveCalories()}',
+                          ),
+                        ],
+                      ),
+                    ], //children
+                  ),
+                ),
+              )
+          )
+    );
+  }
+
   //Function to get the total amount of calories
   //Also accounts for amount of calories burned from workouts
-  int getTotalCalories() {
+  int getEffectiveCalories() {
     int totalCaloriesFromFood = foodList.fold(0, (sum, food) => sum + food.getCalories);
     int totalCaloriesBurned = workoutList.fold(0, (sum, workout) => sum + workout.getCaloriesBurned);
     return totalCaloriesFromFood - totalCaloriesBurned;
+  }
+
+  int getTotalCaloriesFromFood() {
+    int totalCaloriesFromFood = foodList.fold(0, (sum, food) => sum + food.getCalories);
+    return totalCaloriesFromFood;
+  }
+
+  int getTotalCaloriesBurned() {
+    int totalCaloriesBurned = workoutList.fold(0, (sum, workout) => sum + workout.getCaloriesBurned);
+    return totalCaloriesBurned;
+  }
+
+  int getTotalCarbs() {
+    int totalCarbsFromFood = foodList.fold(0, (sum, food) => sum + food.getCarbs);
+    return totalCarbsFromFood;
+  }
+
+  int getTotalProteins() {
+    int totalProteinsFromFood = foodList.fold(0, (sum, food) => sum + food.getProtein);
+    return totalProteinsFromFood;
   }
 
   Widget addNewWorkoutCard() {
